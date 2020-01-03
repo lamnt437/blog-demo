@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\PostRepository;
+use App\Repositories\PostRepositoryEloquent;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 
@@ -25,6 +27,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(
+            PostRepository::class,
+            PostRepositoryEloquent::class
+        );
     }
 }

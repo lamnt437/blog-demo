@@ -15,10 +15,10 @@ class UsersTableSeeder extends Seeder
         User::truncate();
 
         User::create([
-            'name'     => 'Nuruzzaman Milon',
-            'email'    => 'contact@milon.im',
-            'password' => bcrypt('password'),
-            'is_admin' => true
+            'name' => 'Test',
+            'email' => 'admin@a.com',
+            'password' => bcrypt('123456'),
+            'is_admin' => true,
         ]);
     }
 }

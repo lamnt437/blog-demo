@@ -5,12 +5,19 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Tag;
 use App\Models\Post;
 use App\Models\Category;
-use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use App\Http\Controllers\Controller;
+use App\Repositories\PostRepository;
 
 class PostController extends Controller
 {
+    private $postRepository;
+
+    public function __construct(PostRepository $postRepository)
+    {
+        $this->postRepository = $postRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +25,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with(['user', 'category', 'tags', 'comments'])->paginate(10);
+        $posts = $this->postRepository->paginate();
 
         return view('admin.posts.index', compact('posts'));
     }
@@ -45,12 +52,12 @@ class PostController extends Controller
     public function store(PostRequest $request)
     {
         $post = Post::create([
-            'title'       => $request->title,
-            'body'        => $request->body,
-            'category_id' => $request->category_id
+            'title' => $request->title,
+            'body' => $request->body,
+            'category_id' => $request->category_id,
         ]);
 
-        $tagsId = collect($request->tags)->map(function($tag) {
+        $tagsId = collect($request->tags)->map(function ($tag) {
             return Tag::firstOrCreate(['name' => $tag])->id;
         });
 
@@ -68,7 +75,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        $post = $post->load(['user', 'category', 'tags', 'comments']);
+        $post = $this->postRepository->show($post);
 
         return view('admin.posts.show', compact('post'));
     }
@@ -81,7 +88,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        if($post->user_id != auth()->user()->id && auth()->user()->is_admin == false) {
+        if ($post->user_id != auth()->user()->id && auth()->user()->is_admin == false) {
             flash()->overlay("You can't edit other peoples post.");
             return redirect('/admin/posts');
         }
@@ -102,12 +109,12 @@ class PostController extends Controller
     public function update(PostRequest $request, Post $post)
     {
         $post->update([
-            'title'       => $request->title,
-            'body'        => $request->body,
-            'category_id' => $request->category_id
+            'title' => $request->title,
+            'body' => $request->body,
+            'category_id' => $request->category_id,
         ]);
 
-        $tagsId = collect($request->tags)->map(function($tag) {
+        $tagsId = collect($request->tags)->map(function ($tag) {
             return Tag::firstOrCreate(['name' => $tag])->id;
         });
 
@@ -125,7 +132,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        if($post->user_id != auth()->user()->id && auth()->user()->is_admin == false) {
+        if ($post->user_id != auth()->user()->id && auth()->user()->is_admin == false) {
             flash()->overlay("You can't delete other peoples post.");
             return redirect('/admin/posts');
         }

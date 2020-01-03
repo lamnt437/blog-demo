@@ -15,7 +15,8 @@ class Post extends Model
         'body',
         'user_id',
         'category_id',
-        'is_published'
+        'is_published',
+        'view_count',
     ];
 
     protected static function boot()
@@ -23,7 +24,7 @@ class Post extends Model
         parent::boot();
 
         static::creating(function ($post) {
-            if(is_null($post->user_id)) {
+            if (is_null($post->user_id)) {
                 $post->user_id = auth()->user()->id;
             }
         });
@@ -67,5 +68,13 @@ class Post extends Model
     public function getPublishedAttribute()
     {
         return ($this->is_published) ? 'Yes' : 'No';
+    }
+
+    public function getViewCountAttribute($value)
+    {
+        $this->update([
+            'view_count' => ++$value,
+        ]);
+        return $value;
     }
 }

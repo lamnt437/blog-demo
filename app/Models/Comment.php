@@ -11,7 +11,7 @@ class Comment extends Model
     protected $fillable = [
         'body',
         'user_id',
-        'post_id'
+        'post_id',
     ];
 
     protected static function boot()
@@ -19,7 +19,7 @@ class Comment extends Model
         parent::boot();
 
         static::creating(function ($comment) {
-            if(is_null($comment->user_id)) {
+            if (is_null($comment->user_id)) {
                 $comment->user_id = auth()->user()->id;
             }
         });

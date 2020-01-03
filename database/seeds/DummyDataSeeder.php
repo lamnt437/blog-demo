@@ -25,12 +25,12 @@ class DummyDataSeeder extends Seeder
         factory(Comment::class, 40)->create();
 
         $data = [];
-        for($i=0; $i<60; $i++) {
+        for ($i = 0; $i < 60; $i++) {
             $data[] = [
-                'post_id'    => rand(1, 25),
-                'tag_id'     => rand(1, 10),
+                'post_id' => rand(1, 25),
+                'tag_id' => rand(1, 10),
                 'created_at' => Carbon::now()->toDateTimeString(),
-                'updated_at' => Carbon::now()->toDateTimeString()
+                'updated_at' => Carbon::now()->toDateTimeString(),
             ];
         }
 

@@ -12,6 +12,7 @@
                         <span class="pull-right">
                             {{ $post->created_at->toDayDateTimeString() }}
                         </span>
+
                     </div>
 
                     <div class="panel-body">
@@ -24,6 +25,9 @@
                             @empty
                                 <span class="label label-danger">No tag found.</span>
                             @endforelse
+                        </p>
+                        <p>
+                            View count: {{ $post->view_count }}
                         </p>
                     </div>
                 </div>
